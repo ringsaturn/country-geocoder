@@ -8,13 +8,13 @@ pub struct CountryGeocoder {
 }
 
 #[derive(Deserialize)]
-struct Country {
+pub struct Country {
     #[serde(deserialize_with = "deserialize_geometry")]
-    geometry: MultiPolygon<f64>,
+    pub geometry: MultiPolygon<f64>,
 
-    iso_a2: String,
-    name_sort: String,
-    left_handed: bool,
+    pub iso_a2: String,
+    pub name_sort: String,
+    pub left_handed: bool,
 }
 
 impl CountryGeocoder {
@@ -42,7 +42,7 @@ impl CountryGeocoder {
         self.lookup(pt).map(|c| c.name_sort.as_str())
     }
 
-    fn lookup(&self, pt: Point) -> Option<&Country> {
+    pub fn lookup(&self, pt: Point) -> Option<&Country> {
         self.countries
             .iter()
             .find(|country| country.geometry.contains(&pt))
