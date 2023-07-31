@@ -11,7 +11,9 @@ pub struct CountryGeocoder {
 struct Country {
     #[serde(deserialize_with = "deserialize_geometry")]
     geometry: MultiPolygon<f64>,
+
     iso_a2: String,
+    name_sort: String,
     left_handed: bool,
 }
 
@@ -34,6 +36,10 @@ impl CountryGeocoder {
     /// where the point is located, or `None` if the point isn't within any country's boundary.
     pub fn iso_a2(&self, pt: Point) -> Option<&str> {
         self.lookup(pt).map(|c| c.iso_a2.as_str())
+    }
+
+    pub fn name_sort(&self, pt: Point) -> Option<&str> {
+        self.lookup(pt).map(|c| c.name_sort.as_str())
     }
 
     fn lookup(&self, pt: Point) -> Option<&Country> {

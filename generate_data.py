@@ -12,11 +12,12 @@ resp = requests.get("https://d2ad6b4ur7yvpq.cloudfront.net/naturalearth-3.3.0/ne
 geojson = resp.json()
 
 for feature in geojson["features"]:
-    # Only keep ISO 3166-1 alpha-2 country code
     iso_a2 = feature["properties"]["iso_a2"]
+    name_sort = feature["properties"]["name_sort"]
     del feature["properties"]
     feature["properties"] = {
         "iso_a2": iso_a2,
+        "name_sort": name_sort,
         "left_handed": iso_a2 in leftHandedCountryCodes,
     }
 
