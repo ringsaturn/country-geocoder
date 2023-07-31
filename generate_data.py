@@ -2,23 +2,18 @@
 
 import json
 import requests
-import yaml
 
-resp = requests.get("https://github.com/streetcomplete/countrymetadata/raw/master/data/isLeftHandTraffic.yml")
-leftHandedCountryCodes = yaml.safe_load(resp.content)
-
-# The smaller (600KB) "admin 0 countries" file from http://geojson.xyz
-resp = requests.get("https://d2ad6b4ur7yvpq.cloudfront.net/naturalearth-3.3.0/ne_110m_admin_0_countries.geojson")
+# The "admin 0 scale rank" file from http://geojson.xyz
+resp = requests.get("https://d2ad6b4ur7yvpq.cloudfront.net/naturalearth-3.3.0/ne_50m_admin_0_scale_rank.geojson")
 geojson = resp.json()
 
 for feature in geojson["features"]:
-    iso_a2 = feature["properties"]["iso_a2"]
-    name_sort = feature["properties"]["name_sort"]
+    code = feature["properties"]["sr_adm0_a3"]
+    name = feature["properties"]["sr_subunit"]
     del feature["properties"]
     feature["properties"] = {
-        "iso_a2": iso_a2,
-        "name_sort": name_sort,
-        "left_handed": iso_a2 in leftHandedCountryCodes,
+        "code": code,
+        "name": name,
     }
 
     # Turn the Polygons into MultiPolygons, so the Rust can expect one thing
